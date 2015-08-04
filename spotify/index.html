@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Spotify Searcher</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+</head>
+<body>
+	<form>
+		<label>Search artist: </label><input id="artist" type="text" name="artist" >
+    	<button class="js-submit" type="submit">SUBMIT</button>
+	</form>
+
+<div class="show-artists"></div>
+
+<script type="text/javascript">
+
+$('.js-submit').click(function(event)
+{
+	event.preventDefault();
+	console.log("request before to the spotify database");
+	$('.show-artists').empty();
+
+  var request = $.get('https://api.spotify.com/v1/search?type=artist&query=' + $('#artist').val());
+  request.done(handleArtist);
+  console.log("request to the spotify database");
+
+  function handleArtist(result) 
+  {
+  	console.log('REQUEST DONE', result);
+
+    result.artists.items.forEach(function(artists) 
+    {
+    	if (artists.images.length > 0) {
+	    var listArtists = '<li><h2>' + artists.name + '</h2><img src="' + artists.images[0].url + '"/></li>';
+	    $('.show-artists').append(listArtists);
+	    };
+    });
+   }
+});
+
+</script>
+
+</body>
+</html>
